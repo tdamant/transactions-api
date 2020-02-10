@@ -10,7 +10,7 @@ jobs:
       - run:
           name: build & deploy
           command: |
-            ./run ci
+            ./run.sh ci
 
 workflows:
   version: 2
