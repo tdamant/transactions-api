@@ -340,10 +340,10 @@ he@1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-http4js@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/http4js/-/http4js-5.0.3.tgz#3849a6517e69e14c0b2d7905950d20d111284822"
-  integrity sha512-3fPxUWIFRUY4OegXW7W1VSspeNx5ZKl1UJk0aoRUAYpmzen9p/o7Ubuv6rrPxOBhjD03yg4jfa3Vme712Sxlmw==
+http4js@^4.2.7:
+  version "4.2.7"
+  resolved "https://registry.yarnpkg.com/http4js/-/http4js-4.2.7.tgz#edeca3d320afc8d46cf18842e6627d989634ea42"
+  integrity sha512-OcTYhsW9DR0evu4HMXl1aRqj3T/6jZ8iFj1Ab4mPNGKeL8NiRJQs+Yxxn+I36tBU4rimNRUX/xGqsfR/oUBADQ==
 
 inflight@^1.0.4:
   version "1.0.6"
