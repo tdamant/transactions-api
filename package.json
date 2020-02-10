@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha '**/*.test.ts' --require ts-node/register"
+    "test": "mocha '**/*.test.ts' --require ts-node/register",
+    "start": "ts-node main.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.2.8",
