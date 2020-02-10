@@ -18,4 +18,4 @@ gcloud auth list
 
 
 
-gcloud app deploy --project=transactions-api-267820 --quiet
+gcloud app deploy --quiet
