@@ -13,7 +13,7 @@ case "${run_arg}" in
  "ci")
     yarn
     sudo npm install -g typescript
-    tsc
+    tsc --noEmit
     yarn test
     ./deploy.sh
     ;;
