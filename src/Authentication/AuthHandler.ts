@@ -5,27 +5,34 @@ import {Method} from "http4js/core/Methods";
 import {Store} from "../Store/Store";
 import {User} from "../Store/UserStore";
 import {Handler, HttpClient} from "../Server";
+import {HttpHandler} from "http4js/core/HttpMessage";
+
+require('dotenv').config();
 
 export class AuthHandler implements Handler {
   constructor(private userStore: Store<User>, private httpsClient: HttpClient = HttpsClient) {
   };
 
-  async handle(req: Req): Promise<Res> {
+  handle: HttpHandler = async (req: Req): Promise<Res> => {
     const codeFromTrueLayer = req.queries.code;
-    const body = JSON.stringify({
+    const body = {
       grant_type: 'authorization_code',
-      client_id: '1234',
-      client_secret: 'abcd',
-      redirect_uri: 'https://localhost:8000/test',
+      client_id: process.env.CLIENT_ID!,
+      client_secret: process.env.CLIENT_SECRET!,
+      redirect_uri: process.env.REDIRECT_URL!,
       code: codeFromTrueLayer,
-    });
-    const responseFromTrueLayer = await this.httpsClient(ReqOf(Method.GET, 'auth.truelayer-sandbox.com/connect/token', body));
+    };
+    const request = ReqOf(Method.POST,
+      'https://auth.truelayer-sandbox.com/connect/token')
+      .withForm(body);
+    const responseFromTrueLayer = await this.httpsClient(request);
     const text = responseFromTrueLayer.bodyString();
     const responseBody = JSON.parse(text);
+
     if (responseFromTrueLayer.status === 200 && responseBody.access_token) {
       await this.userStore.store({accessToken: responseBody.access_token, refreshToken: responseBody.refresh_token});
-      return ResOf(200)
+      return ResOf(200, responseBody.access_token )
     }
-    return ResOf(500)
+    return ResOf(400)
   }
 }

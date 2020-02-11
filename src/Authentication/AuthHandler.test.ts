@@ -5,9 +5,10 @@ import {Res, ResOf} from "http4js/core/Res";
 import {AuthHandler} from "./AuthHandler";
 import {InMemoryUserStore} from "../Store/UserStore";
 import {HttpClient} from "../Server";
+import * as queryString from "querystring";
 
 describe('AuthHandler', () => {
-  const codeFromTrueLayer = '0fhNz_-p1Tp4MrnKBTAjcX0Af78lYRW8HGGhLDHLwkI';
+  const codeFromTrueLayer = 'huMT6qKeLCzIcFSLDtCWWS51q_U6NqYj-SXhIDyCYTw';
   const accessToken = "accessRandomString";
   const refreshToken = "refreshRandomString";
   const trueLayerResponseBody = {
@@ -19,9 +20,17 @@ describe('AuthHandler', () => {
   };
 
   const FakeHttpClient: HttpClient = async (request: Req, successResponseBody: {} = trueLayerResponseBody,): Promise<Res> => {
+    const correctMethod = request.method === Method.POST;
+    const correctUri = request.uri.asUriString() === 'https://auth.truelayer-sandbox.com/connect/token';
+    const correctContentHeaders = (request.headers)['content-type'] === 'application/x-www-form-urlencoded';
+
+    if (!correctContentHeaders || !correctUri || !correctMethod) {
+      return ResOf(500)
+    }
     const text = request.bodyString();
-    const body = JSON.parse(text);
+    const body = queryString.parse(text);
     const code = body.code;
+
     if (code === codeFromTrueLayer) {
       return ResOf(200, JSON.stringify(successResponseBody))
     }

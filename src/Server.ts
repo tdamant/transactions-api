@@ -1,6 +1,6 @@
 import {routes, Routing} from "http4js/core/Routing";
 import {Method} from "http4js/core/Methods";
-import {Res} from "http4js/core/Res";
+import {Res, ResOf} from "http4js/core/Res";
 import {NativeHttpServer} from "http4js/servers/NativeHttpServer";
 import {HttpHandler} from "http4js/core/HttpMessage";
 import {Req} from "http4js/core/Req";
@@ -19,7 +19,8 @@ export class Server {
   constructor(private authHandler: Handler, private port: number = 8000) {
     const portToUse = process.env.PORT ? parseInt(process.env.PORT) : this.port;
 
-    this.server = routes(Method.GET, '/auth', this.authHandler.handle)
+    this.server = routes(Method.GET, '/health', async () => ResOf(200))
+      .withGet('/auth', this.authHandler.handle)
       .asServer(new NativeHttpServer(portToUse))
   }
 

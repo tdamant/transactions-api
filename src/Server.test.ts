@@ -28,7 +28,8 @@ describe('Server', () => {
   });
 
   it('uses AuthHandler for auth requests', async () => {
-    const trueLayerReq = ReqOf(Method.GET, 'http://localhost:8000/auth?code=0fhNz_-p1Tp4MrnKBTAjcX0Af78lYRW8HGGhLDHLwkI&scope=info%20accounts%20balance%20cards%20transactions%20direct_debits%20standing_orders%20offline_access');
+    const uri = 'http://localhost:8000/auth?code=0fhNz_-p1Tp4MrnKBTAjcX0Af78lYRW8HGGhLDHLwkI&scope=info%20accounts%20balance%20cards%20transactions%20direct_debits%20standing_orders%20offline_access';
+    const trueLayerReq = ReqOf(Method.GET, uri);
     const response = await HttpClient(trueLayerReq);
     expect(response.status).to.eql(200);
   })
