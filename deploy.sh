@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+sudo apt-get install gettext
+
+envsubst < app.yaml.template > app.yaml
+
 if [[ ! $(command -v gcloud) ]]; then
     echo 'Installing gcloud sdk'
     sudo apt-get install python
