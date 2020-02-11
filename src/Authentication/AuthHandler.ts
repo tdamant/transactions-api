@@ -14,25 +14,34 @@ export class AuthHandler implements Handler {
   };
 
   handle: HttpHandler = async (req: Req): Promise<Res> => {
-    const codeFromTrueLayer = req.queries.code;
+    try {
+      const codeFromTrueLayer = req.queries.code as string;
+      const result = await this.exchangeCodeForToken(codeFromTrueLayer);
+      if (result) {
+        await this.userStore.store({accessToken: result.accessToken, refreshToken: result.refreshToken});
+        return ResOf(200, "Auth succeeded" )
+      }
+      return ResOf(400)
+    } catch(e) {
+      console.log(e);
+      return ResOf(500)
+    }
+  };
+
+  private async exchangeCodeForToken(code: string): Promise<{accessToken: string, refreshToken: string} | undefined> {
     const body = {
       grant_type: 'authorization_code',
       client_id: process.env.CLIENT_ID!,
       client_secret: process.env.CLIENT_SECRET!,
       redirect_uri: process.env.REDIRECT_URL!,
-      code: codeFromTrueLayer,
+      code: code,
     };
     const request = ReqOf(Method.POST,
       'https://auth.truelayer-sandbox.com/connect/token')
       .withForm(body);
     const responseFromTrueLayer = await this.httpsClient(request);
     const text = responseFromTrueLayer.bodyString();
-    const responseBody = JSON.parse(text);
-
-    if (responseFromTrueLayer.status === 200 && responseBody.access_token) {
-      await this.userStore.store({accessToken: responseBody.access_token, refreshToken: responseBody.refresh_token});
-      return ResOf(200, responseBody.access_token )
-    }
-    return ResOf(400)
+    const {access_token: accessToken, refresh_token: refreshToken} = JSON.parse(text);
+    return {accessToken, refreshToken}
   }
 }

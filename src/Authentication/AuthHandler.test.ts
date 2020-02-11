@@ -19,6 +19,7 @@ describe('AuthHandler', () => {
     "scope": "info accounts balance cards transactions direct_debits standing_orders offline_access"
   };
 
+  //used to fake the TrueLayer api
   const FakeHttpClient: HttpClient = async (request: Req, successResponseBody: {} = trueLayerResponseBody,): Promise<Res> => {
     const correctMethod = request.method === Method.POST;
     const correctUri = request.uri.asUriString() === 'https://auth.truelayer-sandbox.com/connect/token';
@@ -35,8 +36,8 @@ describe('AuthHandler', () => {
       return ResOf(200, JSON.stringify(successResponseBody))
     }
     return ResOf(401);
-
   };
+
   const inMemoryUserStore = new InMemoryUserStore();
   const authHandler = new AuthHandler(inMemoryUserStore, FakeHttpClient);
 
