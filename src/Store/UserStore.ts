@@ -1,5 +1,6 @@
 import {Store} from "./Store";
 import uuid from "uuid";
+import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
 
 export interface User {
   accessToken: string,
@@ -8,12 +9,12 @@ export interface User {
 }
 
 
-const randomString = (prefix = 'string') => {
+export const randomString = (prefix = 'string') => {
   return `${prefix}${Math.floor(Math.random() * 1000000)}`
 };
 
 
-function buildUser(user: Partial<User>): User {
+export const buildUser = (user: Partial<User>): User => {
   return {
     ...{
       accessToken: randomString(),
@@ -22,7 +23,7 @@ function buildUser(user: Partial<User>): User {
     },
     ...user
   }
-}
+};
 
 export class InMemoryUserStore implements Store<User> {
   public users: User[] = [];
@@ -35,5 +36,27 @@ export class InMemoryUserStore implements Store<User> {
     const fullUser = buildUser(user);
     this.users.push(fullUser);
     return fullUser
+  }
+}
+
+export class SqlUserStore implements Store<User> {
+  constructor(private database: PostgresDatabase) {
+  }
+
+  async store(partialUser: Partial<User>): Promise<User | undefined> {
+    const user = buildUser(partialUser);
+
+    try {
+      const sql = `INSERT INTO users (id, access_token, refresh_token) VALUES ('${user.id}', '${user.accessToken}', '${user.refreshToken}') RETURNING *;`;
+      const result = await this.database.query(sql);
+      if (result.rows.length === 1) return user
+    } catch (e) {
+      console.log(e);
+      return undefined
+    }
+  }
+
+  findAll(): Promise<User[] | undefined> {
+    throw new Error("Method not implemented.");
   }
 }

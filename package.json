@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha '**/*.test.ts' --require ts-node/register",
+    "test:integration": "mocha '**/*.test.int.ts' --require ts-node/register",
+    "test:unit": "mocha '**/*.test.ts' --require ts-node/register",
     "start": "ts-node main.ts"
   },
   "devDependencies": {
@@ -15,9 +16,14 @@
   },
   "dependencies": {
     "@types/node": "^13.7.0",
+    "@types/pg": "7.11.2",
+    "@types/dockerode": "^2.5.20",
     "@types/uuid": "^3.4.7",
     "dotenv": "^8.2.0",
     "http4js": "^4.2.7",
+    "pg": "7.12.1",
+    "postgrator": "^3.10.2",
+    "testcontainers": "^2.1.0",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.5",
     "uuid": "^3.4.0"

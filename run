@@ -5,7 +5,8 @@ run_arg="${1:-test}"
 case "${run_arg}" in
 "test")
     yarn
-    yarn test
+    yarn test:unit
+    yarn test:integration
     ;;
 "start")
     yarn start
@@ -14,7 +15,7 @@ case "${run_arg}" in
     yarn
     sudo npm install -g typescript
     tsc --noEmit
-    yarn test
+    yarn test:unit
     ./deploy.sh
     ;;
  *)
