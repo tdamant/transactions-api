@@ -1,5 +1,5 @@
 export interface Store<T> {
-  store(t: T): Promise<T | undefined>
+  store(t: Partial<T>): Promise<T | undefined>
 
   findAll(): Promise<T[] | undefined>
 }

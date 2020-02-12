@@ -46,8 +46,9 @@ describe('AuthHandler', () => {
     const trueLayerReq = ReqOf(Method.GET, `https://localhost:8000/auth?${trueLayerQueryParams}`);
     const response = await authHandler.handle(trueLayerReq);
     expect(response.status).to.eql(200);
-    const users = await inMemoryUserStore.findAll();
-    expect(users).to.eql([{accessToken, refreshToken}])
+    const {accessToken: storedAccessToken, refreshToken: storedRefreshToken} = (await inMemoryUserStore.findAll())![0];
+    expect(storedAccessToken).to.eql(accessToken);
+    expect(storedRefreshToken).to.eql(storedRefreshToken)
   })
 });
 
