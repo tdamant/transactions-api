@@ -8,7 +8,7 @@ import {PostgresDatabase} from "./PostgresDatabase";
 export const getConnectionDetails = (port: number = 5432): ConnectionDetails => {
   if(process.env.NODE_ENV === 'production') {
     return {
-      host: `/cloudsql/botty-254715:us-central1:botty-store`,
+      host: `/cloudsql/transactions-api-267820:europe-west1:transactions-api`,
       user: 'postgres',
       password: process.env.POSTGRES_PASSWORD || '',
       database: 'botty-store'
