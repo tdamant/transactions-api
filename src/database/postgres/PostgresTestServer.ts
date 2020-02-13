@@ -11,7 +11,7 @@ export const getConnectionDetails = (port: number = 5432): ConnectionDetails => 
       host: `/cloudsql/transactions-api-267820:europe-west1:transactions-api`,
       user: 'postgres',
       password: process.env.POSTGRES_PASSWORD || '',
-      database: 'transactions-api'
+      database: 'transactions_api'
     }
   }
 
