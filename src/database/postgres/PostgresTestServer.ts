@@ -5,7 +5,16 @@ import {Pool} from 'pg';
 import {ConnectionDetails, PostgresMigrator} from "./PostgresMigrator";
 import {PostgresDatabase} from "./PostgresDatabase";
 
-export const getConnectionDetails = (port: number): ConnectionDetails => {
+export const getConnectionDetails = (port: number = 5432): ConnectionDetails => {
+  if(process.env.NODE_ENV === 'production') {
+    return {
+      host: `/cloudsql/botty-254715:us-central1:botty-store`,
+      user: 'postgres',
+      password: process.env.POSTGRES_PASSWORD || '',
+      database: 'botty-store'
+    }
+  }
+
   return {
     host: 'localhost',
     port: port,
