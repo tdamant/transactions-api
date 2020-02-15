@@ -14,21 +14,16 @@ export class AuthHandler implements Handler {
   };
 
   handle: HttpHandler = async (req: Req): Promise<Res> => {
-    try {
       const codeFromTrueLayer = req.queries.code as string;
-      const result = await this.exchangeCodeForToken(codeFromTrueLayer);
-      if (result) {
-        const user = await this.userStore.store({accessToken: result.accessToken, refreshToken: result.refreshToken});
-        return ResOf(200, `Auth succeeded ${user?.accessToken}`,  )
+      const {accessToken, refreshToken} = await this.exchangeCodeForToken(codeFromTrueLayer);
+      if (accessToken && refreshToken) {
+        const user = await this.userStore.store({accessToken, refreshToken});
+        return user ? ResOf(200, JSON.stringify({userId: user.id})) : ResOf(500, "authentication successful unable to store user")
       }
-      return ResOf(400)
-    } catch(e) {
-      console.log(e);
-      return ResOf(500)
-    }
+      return ResOf(500, "authentication with Truelayer failed")
   };
 
-  private async exchangeCodeForToken(code: string): Promise<{accessToken: string, refreshToken: string} | undefined> {
+  private async exchangeCodeForToken(code: string): Promise<{accessToken: string | undefined, refreshToken: string | undefined}> {
     const body = {
       grant_type: 'authorization_code',
       client_id: process.env.CLIENT_ID!,
@@ -42,7 +37,6 @@ export class AuthHandler implements Handler {
     const responseFromTrueLayer = await this.httpsClient(request);
     const text = responseFromTrueLayer.bodyString();
     const {access_token: accessToken, refresh_token: refreshToken} = JSON.parse(text);
-    if(!accessToken || !refreshToken) {return undefined}
     return {accessToken, refreshToken}
   }
 }

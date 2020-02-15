@@ -26,6 +26,9 @@ export const buildUser = (user: Partial<User>): User => {
 };
 
 export class InMemoryUserStore implements Store<User> {
+    storeAll(tArray: User[]): Promise<User[] | undefined> {
+        throw new Error("Method not implemented.");
+    }
   public users: User[] = [];
 
   async findAll(): Promise<User[] | undefined> {
@@ -40,6 +43,9 @@ export class InMemoryUserStore implements Store<User> {
 }
 
 export class SqlUserStore implements Store<User> {
+    storeAll(tArray: User[]): Promise<User[] | undefined> {
+        throw new Error("Method not implemented.");
+    }
   constructor(private database: PostgresDatabase) {
   }
 
