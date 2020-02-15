@@ -18,8 +18,8 @@ export class AuthHandler implements Handler {
       const codeFromTrueLayer = req.queries.code as string;
       const result = await this.exchangeCodeForToken(codeFromTrueLayer);
       if (result) {
-        await this.userStore.store({accessToken: result.accessToken, refreshToken: result.refreshToken});
-        return ResOf(200, "Auth succeeded" )
+        const user = await this.userStore.store({accessToken: result.accessToken, refreshToken: result.refreshToken});
+        return ResOf(200, `Auth succeeded ${user?.accessToken}`,  )
       }
       return ResOf(400)
     } catch(e) {
@@ -42,6 +42,7 @@ export class AuthHandler implements Handler {
     const responseFromTrueLayer = await this.httpsClient(request);
     const text = responseFromTrueLayer.bodyString();
     const {access_token: accessToken, refresh_token: refreshToken} = JSON.parse(text);
+    if(!accessToken || !refreshToken) {return undefined}
     return {accessToken, refreshToken}
   }
 }

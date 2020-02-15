@@ -26,7 +26,7 @@ describe('AuthHandler', () => {
     const correctContentHeaders = (request.headers)['content-type'] === 'application/x-www-form-urlencoded';
 
     if (!correctContentHeaders || !correctUri || !correctMethod) {
-      return ResOf(500)
+      return ResOf(401)
     }
     const text = request.bodyString();
     const body = queryString.parse(text);
@@ -35,11 +35,15 @@ describe('AuthHandler', () => {
     if (code === codeFromTrueLayer) {
       return ResOf(200, JSON.stringify(successResponseBody))
     }
-    return ResOf(401);
+    return ResOf(401, JSON.stringify({response: 'unsuccessfull'}));
   };
 
   const inMemoryUserStore = new InMemoryUserStore();
   const authHandler = new AuthHandler(inMemoryUserStore, FakeHttpClient);
+
+  beforeEach(() => {
+    inMemoryUserStore.users = [];
+  });
 
   it('responds to truelayer with the code in exchange for the access token', async () => {
     const trueLayerQueryParams = `code=${codeFromTrueLayer}&scope=info%20accounts%20balance%20cards%20transactions%20direct_debits%20standing_orders%20offline_access`;
@@ -49,6 +53,14 @@ describe('AuthHandler', () => {
     const {accessToken: storedAccessToken, refreshToken: storedRefreshToken} = (await inMemoryUserStore.findAll())![0];
     expect(storedAccessToken).to.eql(accessToken);
     expect(storedRefreshToken).to.eql(storedRefreshToken)
+  });
+
+  it('doesnt store users unless it receives an access token from Truelayer', async () => {
+    const wrongCode = 'wrongCode';
+    const trueLayerQueryParams = `code=${wrongCode}&scope=info%20accounts%20balance%20cards%20transactions%20direct_debits%20standing_orders%20offline_access`;
+    const trueLayerReq = ReqOf(Method.GET, `https://localhost:8000/auth?${trueLayerQueryParams}`);
+    await authHandler.handle(trueLayerReq);
+    expect(inMemoryUserStore.users.length).to.eql(0)
   })
 });
 

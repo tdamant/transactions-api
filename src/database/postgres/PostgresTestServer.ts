@@ -44,10 +44,9 @@ export class PostgresTestServer {
   public async startAndGetDB(): Promise<PostgresDatabase> {
     const adminConnectionDetails = await this.start();
     await new PostgresMigrator(adminConnectionDetails, path.resolve('./src/database/bootstrap')).migrate();
-    const bottyConnectionDetails = getConnectionDetails(adminConnectionDetails.port);
-
-    await new PostgresMigrator(bottyConnectionDetails, path.resolve('./src/database/migrations')).migrate();
-    return new PostgresDatabase(new Pool(bottyConnectionDetails));
+    const connectionDetails = getConnectionDetails(adminConnectionDetails.port);
+    await new PostgresMigrator(connectionDetails, path.resolve('./src/database/migrations')).migrate();
+    return new PostgresDatabase(new Pool(connectionDetails));
   }
 
   public async stop() {

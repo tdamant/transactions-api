@@ -49,7 +49,14 @@ export class SqlUserStore implements Store<User> {
     try {
       const sql = `INSERT INTO users (id, access_token, refresh_token) VALUES ('${user.id}', '${user.accessToken}', '${user.refreshToken}') RETURNING *;`;
       const result = await this.database.query(sql);
-      if (result.rows.length === 1) return user
+      if (result.rows.length === 1)  {
+        const userFromDB = result.rows[0];
+        return {
+          id: userFromDB.id,
+          accessToken: userFromDB.access_token,
+          refreshToken: userFromDB.refresh_token
+        }
+      }
     } catch (e) {
       console.log(e);
       return undefined
