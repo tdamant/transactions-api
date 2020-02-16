@@ -5,6 +5,7 @@ import {buildUser, randomString, SqlUserStore, User} from "./UserStore";
 import {Store} from "./Store";
 import {Transaction} from "../Transactions/Transaction";
 import {SqlTransactionStore} from "./TransactionStore";
+import {getExampleTransactions} from "../Utils/trueLayerUtils";
 
 describe('SqlStores', function () {
   this.timeout(30000);
@@ -47,60 +48,16 @@ describe('SqlStores', function () {
   });
 
   describe('SqlTransactionStore', () => {
-    const transactions: Transaction[] = [
-      {
-        userId: 'testUserId',
-        accountId: 'testAccountId',
-        "transaction_id": "03c333979b729315545816aaa365c33f",
-        "timestamp": "2018-03-06T00:00:00",
-        "description": "GOOGLE PLAY STORE",
-        "amount": -2.99,
-        "currency": "GBP",
-        "transaction_type": "DEBIT",
-        "transaction_category": "PURCHASE",
-        "transaction_classification": [
-          "Entertainment",
-          "Games"
-        ],
-        "merchant_name": "Google play",
-        "running_balance": {
-          "amount": 1238.60,
-          "currency": "GBP"
-        },
-        "meta": {
-          "bank_transaction_id": "9882ks-00js",
-          "provider_transaction_category": "DEB"
-        }
-      },
-      {
-        accountId: 'anotherAccountId',
-        userId: 'testUserId',
-        "transaction_id": "3484333edb2078e77cf2ed58f1dec11e",
-        "timestamp": "2018-02-18T00:00:00",
-        "description": "PAYPAL EBAY",
-        "amount": -25.25,
-        "currency": "GBP",
-        "transaction_type": "DEBIT",
-        "transaction_category": "PURCHASE",
-        "transaction_classification": [
-          "Shopping",
-          "General"
-        ],
-        "merchant_name": "Ebay",
-        "meta": {
-          "bank_transaction_id": "33b5555724",
-          "provider_transaction_category": "DEB"
-        }
-      }
-    ];
     it('should store multiple transactions', async () => {
-      await userStore.store({id: 'testUserId'});
+      const user = buildUser({});
+      const transactions = getExampleTransactions(user.id, randomString());
+      await userStore.store(user);
       const response = await transactionStore.storeAll(transactions);
       const transactionsInDb = (await database.query('select * from transactions;')).rows;
       expect(transactionsInDb.length).to.eql(2);
       expect(transactionsInDb).to.eql([
         {
-          "account_id": "testAccountId",
+          "account_id": transactions[0].accountId,
           "amount": "-2.99",
           "bank_transaction_id": "9882ks-00js",
           "currency": "GBP",
@@ -117,10 +74,10 @@ describe('SqlStores', function () {
           ],
           "transaction_id": "03c333979b729315545816aaa365c33f",
           "transaction_type": "DEBIT",
-          "user_id": "testUserId"
+          "user_id": user.id
         },
         {
-          "account_id": "anotherAccountId",
+          "account_id": transactions[0].accountId,
           "amount": "-25.25",
           "bank_transaction_id": "33b5555724",
           "currency": "GBP",
@@ -137,7 +94,7 @@ describe('SqlStores', function () {
           ],
           "transaction_id": "3484333edb2078e77cf2ed58f1dec11e",
           "transaction_type": "DEBIT",
-          "user_id": "testUserId"
+          "user_id": user.id
         }
       ]);
       expect(response).to.eql(transactions)

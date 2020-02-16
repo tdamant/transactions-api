@@ -32,7 +32,7 @@ export class Transactions {
     const accounts = await this.trueLayerApi.getAccounts(user.accessToken);
     if (!accounts) return;
     await Promise.all(accounts.map(async (account: MinimalAccountDetails) => {
-      const transactions = await this.trueLayerApi.getTransactions(user.accessToken, account.id);
+      const transactions = await this.trueLayerApi.getTransactions(user, account.id);
       if (transactions) {
         await this.transactionStore.storeAll(transactions);
       }

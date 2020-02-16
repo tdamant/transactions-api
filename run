@@ -1,29 +1,25 @@
 #!/usr/bin/env bash
 set -o errexit
-NODE_VERSION='12.14.1'
 
-version_check () {
-    if [[ $(node -v) != "v${NODE_VERSION}" ]]; then  return 1; else return 0; fi
-}
+export NVM_DIR=$HOME/.nvm
 
-install_node () {
-    export NVM_DIR=$HOME/.nvm
+if [[ ! -d ${NVM_DIR} ]]; then
+  mkdir -p ${NVM_DIR}
+  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+fi
 
-    if [[ ! -d ${NVM_DIR} ]]; then
-        mkdir -p ${NVM_DIR}
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-    fi
+if [[ ! $(command -v nvm) ]]; then
+  set +e
+  [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+  set -e
+fi
 
-    if [[ ! $(command -v nvm) ]]; then
-        set +e
-        [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
-        set -e
-    fi
+nvm install
 
-    nvm use "${NODE_VERSION}"
-}
+if [[ ! $(command -v yarn) ]]; then
+    npm install -g yarn
+fi
 
-if ! version_check; then install_node; fi
 
 run_arg="${1:-test}"
 case "${run_arg}" in
