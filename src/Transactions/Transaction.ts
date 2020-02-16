@@ -1,6 +1,6 @@
 import {Store} from "../Store/Store";
 import {User} from "../Store/UserStore";
-import {FakeTrueLayerApi, MinimalAccountDetails} from "../TrueLayer/TrueLayerApi";
+import {MinimalAccountDetails, TrueLayerApi} from "../TrueLayer/TrueLayerApi";
 
 export type Transaction = {
   "userId": string,
@@ -25,7 +25,7 @@ export type Transaction = {
 }
 
 export class Transactions {
-  constructor(private transactionStore: Store<Transaction>, private trueLayerApi: FakeTrueLayerApi) {
+  constructor(private transactionStore: Store<Transaction>, private trueLayerApi: TrueLayerApi) {
   }
 
   async findAndStore(user: User): Promise<void> {
