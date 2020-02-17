@@ -1,7 +1,7 @@
-import {Store} from "./Store";
+import {Store} from "../Store";
 import uuid from "uuid";
-import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
-import {randomString} from "../Utils/random";
+import {PostgresDatabase} from "../../database/postgres/PostgresDatabase";
+import {randomString} from "../../Utils/random";
 
 export interface User {
   accessToken: string,

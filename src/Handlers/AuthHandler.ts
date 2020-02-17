@@ -3,7 +3,7 @@ import {Req, ReqOf} from "http4js/core/Req";
 import {Res, ResOf} from "http4js/core/Res";
 import {Method} from "http4js/core/Methods";
 import {Store} from "../Store/Store";
-import {User} from "../Store/UserStore";
+import {User} from "../Store/User/UserStore";
 import {Handler, HttpClient} from "../Server";
 import {HttpHandler} from "http4js/core/HttpMessage";
 import {RealTransactionsManager} from "../Transactions/TransactionManager";

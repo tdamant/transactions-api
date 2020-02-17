@@ -8,7 +8,7 @@ import {
   getExampleTransactionResponse,
   getExampleTransactions
 } from "../Utils/trueLayerUtils";
-import {buildUser} from "../Store/UserStore";
+import {buildUser} from "../Store/User/UserStore";
 
 describe('RealTrueLayerApi', () => {
   const user = buildUser({});

@@ -1,9 +1,9 @@
 import {ReqOf} from "http4js/core/Req";
 import {Method} from "http4js/core/Methods";
-import {buildUser, InMemoryUserStore} from "../Store/UserStore";
+import {buildUser, InMemoryUserStore} from "../Store/User/UserStore";
 import {expect} from "chai";
 import {FakeTransactionManager, Transaction} from "../Transactions/TransactionManager";
-import {InMemoryTransactionStore} from "../Store/TransactionStore";
+import {InMemoryTransactionStore} from "../Store/Transaction/TransactionStore";
 import {TransactionHandler} from "./TransactionHandler";
 import {buildTransaction} from "../Utils/transactionUtils";
 

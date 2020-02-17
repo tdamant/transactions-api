@@ -1,5 +1,5 @@
-import {Transaction, TransactionStore} from "../Transactions/TransactionManager";
-import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
+import {Transaction, TransactionStore} from "../../Transactions/TransactionManager";
+import {PostgresDatabase} from "../../database/postgres/PostgresDatabase";
 
 export class InMemoryTransactionStore implements TransactionStore {
   private transactions: Transaction[] = [];

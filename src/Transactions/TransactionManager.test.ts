@@ -1,8 +1,8 @@
-import {buildUser} from "../Store/UserStore";
+import {buildUser} from "../Store/User/UserStore";
 import {expect} from "chai";
 import {RealTransactionsManager} from "./TransactionManager";
 import {FakeTrueLayerApi} from "../TrueLayer/TrueLayerApi";
-import {InMemoryTransactionStore} from "../Store/TransactionStore";
+import {InMemoryTransactionStore} from "../Store/Transaction/TransactionStore";
 import {buildTransaction} from "../Utils/transactionUtils";
 
 describe('TransactionFetcher', () => {

@@ -3,11 +3,11 @@ import {Method} from "http4js/core/Methods";
 import {expect} from "chai";
 import {Res, ResOf} from "http4js/core/Res";
 import {AuthHandler} from "./AuthHandler";
-import {buildUser, InMemoryUserStore} from "../Store/UserStore";
+import {buildUser, InMemoryUserStore} from "../Store/User/UserStore";
 import {HttpClient} from "../Server";
 import * as queryString from "querystring";
 import {RealTransactionsManager} from "../Transactions/TransactionManager";
-import {InMemoryTransactionStore} from "../Store/TransactionStore";
+import {InMemoryTransactionStore} from "../Store/Transaction/TransactionStore";
 import {FakeTrueLayerApi} from "../TrueLayer/TrueLayerApi";
 
 describe('AuthHandler', () => {

@@ -1,5 +1,5 @@
 import {Transaction} from "../Transactions/TransactionManager";
-import {User} from "../Store/UserStore";
+import {User} from "../Store/User/UserStore";
 import {HttpClient} from "../Server";
 import {HttpsClient} from "http4js/client/HttpsClient";
 import {ReqOf} from "http4js/core/Req";

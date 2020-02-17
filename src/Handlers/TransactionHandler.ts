@@ -1,7 +1,7 @@
 import {Handler} from "../Server";
 import {TransactionsManager} from "../Transactions/TransactionManager";
 import {Store} from "../Store/Store";
-import {User} from "../Store/UserStore";
+import {User} from "../Store/User/UserStore";
 import {Req} from "http4js/core/Req";
 import {Res, ResOf} from "http4js/core/Res";
 

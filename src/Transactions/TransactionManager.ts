@@ -1,5 +1,5 @@
 import {Store} from "../Store/Store";
-import {User} from "../Store/UserStore";
+import {User} from "../Store/User/UserStore";
 import {MinimalAccountDetails, TrueLayerApi} from "../TrueLayer/TrueLayerApi";
 
 export type Transaction = {
