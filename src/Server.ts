@@ -16,11 +16,12 @@ export interface HttpClient {
 export class Server {
   private server: Routing;
 
-  constructor(private authHandler: Handler, private port: number = 8000) {
+  constructor(private authHandler: Handler, private transactionsHandler: Handler,private port: number = 8000) {
     const portToUse = process.env.PORT ? parseInt(process.env.PORT) : this.port;
 
     this.server = routes(Method.GET, '/health', async () => ResOf(200))
-      .withGet('/auth', this.authHandler.handle)
+      .withGet('/auth', this.authHandler.handle.bind(this.authHandler))
+      .withGet('/transactions', this.transactionsHandler.handle.bind(this.transactionsHandler))
       .asServer(new NativeHttpServer(portToUse))
   }
 

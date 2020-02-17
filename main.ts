@@ -8,6 +8,7 @@ import {getConnectionDetails, PostgresTestServer} from "./src/database/postgres/
 import {Transactions} from "./src/Transactions/Transaction";
 import {SqlTransactionStore} from "./src/Store/TransactionStore";
 import {RealTrueLayerApi} from "./src/TrueLayer/TrueLayerApi";
+import {InMemoryHandler} from "./src/Utils/InMemoryHandler";
 
 
 const getDB = async () => {
@@ -26,7 +27,8 @@ const start = async () => {
   const sqlTransactionStore = new SqlTransactionStore(database);
   const transactions = new Transactions(sqlTransactionStore, new RealTrueLayerApi());
   const authHandler = new AuthHandler(sqlUserStore, transactions);
-  const server = new Server(authHandler);
+  const transactionHandler = new InMemoryHandler();
+  const server = new Server(authHandler, transactionHandler);
   server.start();
 };
 

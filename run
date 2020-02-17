@@ -33,9 +33,6 @@ case "${run_arg}" in
     yarn test:unit
     yarn test:integration
     ;;
-"start:local")
-    yarn start:local
-    ;;
 "start")
     yarn start
     ;;
