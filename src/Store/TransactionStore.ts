@@ -68,7 +68,7 @@ export class SqlTransactionStore implements Store<Transaction> {
           // @ts-ignore
           return !!value ? Object.values(value).map((val: string | number) => `'${val}'`) : ['NULL', 'NULL']
         }
-      return value ? `'${value}'` : 'NULL'
+      return value ? `$$${value}$$` : 'NULL'
     });
     return Array.prototype.concat.apply([], mapped)
   }
