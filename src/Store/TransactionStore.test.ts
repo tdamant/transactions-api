@@ -33,23 +33,23 @@ describe('TransactionSqlStore', () => {
       };
 
       expect(SqlTransactionStore.mapTransactionToValues(unorderedTransaction)).to.eql([
-        "'testUserId'",
-        "'testAccountId'",
-        "'03c333979b729315545816aaa365c33f'",
-        "'2018-03-06T00:00:00'",
-        "'GOOGLE PLAY STORE'",
-        "'-2.99'",
-        "'GBP'",
-        "'DEBIT'",
-        "'PURCHASE'",
+        "$$testUserId$$",
+        "$$testAccountId$$",
+        "$$03c333979b729315545816aaa365c33f$$",
+        "$$2018-03-06T00:00:00$$",
+        "$$GOOGLE PLAY STORE$$",
+        "$$-2.99$$",
+        "$$GBP$$",
+        "$$DEBIT$$",
+        "$$PURCHASE$$",
         "'{Entertainment,Games}'",
-        "'Google play'",
-        "'9882ks-00js'",
-        "'DEB'",
-        "'1238.6'",
-        "'GBP'",
+        "$$Google play$$",
+        "$$9882ks-00js$$",
+        "$$DEB$$",
+        "$$1238.6$$",
+        "$$GBP$$",
       ])
-    })
+    });
     it('handles optional fields being undefined', () => {
       const optionalFieldsEmpty: Transaction = {
         accountId: 'anotherAccountId',
@@ -72,19 +72,19 @@ describe('TransactionSqlStore', () => {
       };
       const values = SqlTransactionStore.mapTransactionToValues(optionalFieldsEmpty);
       expect(values).to.eql([
-        "'testUserId'",
-        "'anotherAccountId'",
-        "'3484333edb2078e77cf2ed58f1dec11e'",
-        "'2018-02-18T00:00:00'",
-        "'PAYPAL EBAY'",
-        "'-25.25'",
-        "'GBP'",
-        "'DEBIT'",
-        "'PURCHASE'",
+        "$$testUserId$$",
+        "$$anotherAccountId$$",
+        "$$3484333edb2078e77cf2ed58f1dec11e$$",
+        "$$2018-02-18T00:00:00$$",
+        "$$PAYPAL EBAY$$",
+        "$$-25.25$$",
+        "$$GBP$$",
+        "$$DEBIT$$",
+        "$$PURCHASE$$",
         "'{Shopping,General}'",
         'NULL',
-        "'33b5555724'",
-        "'DEB'",
+        "$$33b5555724$$",
+        "$$DEB$$",
         'NULL',
         'NULL',
       ])

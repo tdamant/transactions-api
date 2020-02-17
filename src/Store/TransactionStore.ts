@@ -66,7 +66,7 @@ export class SqlTransactionStore implements Store<Transaction> {
       }
         if(['meta', 'running_balance'].includes(propName)){
           // @ts-ignore
-          return !!value ? Object.values(value).map((val: string | number) => `'${val}'`) : ['NULL', 'NULL']
+          return !!value ? Object.values(value).map((val: string | number) => `$$${val}$$`) : ['NULL', 'NULL']
         }
       return value ? `$$${value}$$` : 'NULL'
     });

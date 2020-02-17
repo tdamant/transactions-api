@@ -1,40 +1,48 @@
 #!/usr/bin/env bash
 set -o errexit
 
-export NVM_DIR=$HOME/.nvm
+NODE_VERSION='12.14.1'
 
-if [[ ! -d ${NVM_DIR} ]]; then
-  mkdir -p ${NVM_DIR}
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-fi
+version_check () {
+    if [[ $(node -v) != "v${NODE_VERSION}" ]]; then  return 1; else return 0; fi
+}
 
-if [[ ! $(command -v nvm) ]]; then
-  set +e
-  [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
-  set -e
-fi
+install_node () {
+    export NVM_DIR=$HOME/.nvm
 
-nvm install
+    if [[ ! -d ${NVM_DIR} ]]; then
+        mkdir -p ${NVM_DIR}
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+    fi
 
-if [[ ! $(command -v yarn) ]]; then
-    npm install -g yarn
-fi
+    if [[ ! $(command -v nvm) ]]; then
+        set +e
+        [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"
+        set -e
+    fi
 
+    nvm use "${NODE_VERSION}"
+}
+
+yarn
 
 run_arg="${1:-test}"
 case "${run_arg}" in
 "test")
-    yarn
+    if ! version_check; then install_node; fi
     yarn test:unit
     yarn test:integration
+    ;;
+"start:local")
+    yarn start:local
     ;;
 "start")
     yarn start
     ;;
  "ci")
-    yarn
+    npm i
     sudo npm install -g typescript
-    tsc --noEmit
+    tsc
     yarn test:unit
     ./deploy.sh
     ;;
