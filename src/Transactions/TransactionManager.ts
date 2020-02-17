@@ -29,11 +29,28 @@ export interface TransactionsManager {
   getByUser(user: User): Promise<{accountId: string, transactions: Transaction[]}[] | undefined>
 }
 
+export interface TransactionStore extends Store<Transaction>{
+  findByUserId(userId: string): Promise<Transaction[] | undefined>
+}
+
 export class RealTransactionsManager implements TransactionsManager{
-    getByUser(user: User): Promise<{accountId: string, transactions: Transaction[]}[] | undefined> {
-        throw new Error("Method not implemented.");
+
+  constructor(private transactionStore: TransactionStore, private trueLayerApi: TrueLayerApi) {
+  }
+  //todo make more effecient dont over loop
+  async getByUser(user: User): Promise<{accountId: string, transactions: Transaction[]}[] | undefined> {
+    const transactions = await this.transactionStore.findByUserId(user.id);
+    if (!transactions) {
+      return undefined
     }
-  constructor(private transactionStore: Store<Transaction>, private trueLayerApi: TrueLayerApi) {
+    const allAccountIds = transactions.map((t) => t.accountId);
+    const filteredAccountIds = [...new Set(allAccountIds)];
+    return filteredAccountIds.map((accountId) => {
+      return {
+        accountId,
+        transactions: transactions.filter((t) => t.accountId === accountId)
+      }
+    })
   }
 
   async findAndStore(user: User): Promise<void> {
@@ -49,6 +66,7 @@ export class RealTransactionsManager implements TransactionsManager{
 
 }
 
+//todo remove use dept. injection
 export class FakeTransactionManager implements TransactionsManager {
   constructor(private transactionStore: Store<Transaction>) {
   }
