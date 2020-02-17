@@ -1,11 +1,12 @@
 import {PostgresTestServer} from "../database/postgres/PostgresTestServer";
 import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
 import {expect} from "chai";
-import {buildUser, randomString, SqlUserStore, User} from "./UserStore";
+import {buildUser, SqlUserStore, User} from "./UserStore";
 import {Store} from "./Store";
-import {Transaction} from "../Transactions/Transaction";
+import {Transaction} from "../Transactions/TransactionManager";
 import {SqlTransactionStore} from "./TransactionStore";
 import {getExampleTransactions} from "../Utils/trueLayerUtils";
+import {randomString} from "../Utils/random";
 
 describe('SqlStores', function () {
   this.timeout(30000);

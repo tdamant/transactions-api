@@ -1,8 +1,7 @@
-import {Transaction} from "../Transactions/Transaction";
+import {Transaction} from "../Transactions/TransactionManager";
 import {expect} from "chai";
 import {SqlTransactionStore} from "./TransactionStore";
 
-export type ValueOf<T> = T[keyof T];
 
 describe('TransactionSqlStore', () => {
   describe('mapTransactionToValues', () => {

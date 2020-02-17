@@ -1,4 +1,4 @@
-import {Transaction} from "../Transactions/Transaction";
+import {Transaction} from "../Transactions/TransactionManager";
 
 export const getExampleTransactions = (userId: string, accountId: string): Transaction[] => {
   return [

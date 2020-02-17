@@ -6,7 +6,7 @@ import {AuthHandler} from "./AuthHandler";
 import {buildUser, InMemoryUserStore} from "../Store/UserStore";
 import {HttpClient} from "../Server";
 import * as queryString from "querystring";
-import {Transactions} from "../Transactions/Transaction";
+import {RealTransactionsManager} from "../Transactions/TransactionManager";
 import {InMemoryTransactionStore} from "../Store/TransactionStore";
 import {FakeTrueLayerApi} from "../TrueLayer/TrueLayerApi";
 
@@ -42,7 +42,7 @@ describe('AuthHandler', () => {
   };
 
   const inMemoryUserStore = new InMemoryUserStore();
-  const transactions = new Transactions(new InMemoryTransactionStore(), new FakeTrueLayerApi(buildUser({}), [], []));
+  const transactions = new RealTransactionsManager(new InMemoryTransactionStore(), new FakeTrueLayerApi(buildUser({}), [], []));
   const authHandler = new AuthHandler(inMemoryUserStore, transactions,FakeHttpClient);
 
   beforeEach(() => {

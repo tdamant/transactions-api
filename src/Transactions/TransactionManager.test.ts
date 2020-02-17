@@ -1,6 +1,6 @@
 import {buildUser} from "../Store/UserStore";
 import {expect} from "chai";
-import {Transactions} from "./Transaction";
+import {RealTransactionsManager} from "./TransactionManager";
 import {FakeTrueLayerApi} from "../TrueLayer/TrueLayerApi";
 import {InMemoryTransactionStore} from "../Store/TransactionStore";
 
@@ -66,7 +66,7 @@ describe('TransactionFetcher', () => {
   ];
   it('given a user fetches and stores all transactions from TrueLayer', async () => {
     const fakeTrueLayerApi = new FakeTrueLayerApi(user, exampleAccounts,exampleTransactions);
-    const transactions = new Transactions(inMemoryTransactionStore, fakeTrueLayerApi);
+    const transactions = new RealTransactionsManager(inMemoryTransactionStore, fakeTrueLayerApi);
     await transactions.findAndStore(user);
     const storedTransactions = await inMemoryTransactionStore.findAll();
     expect(storedTransactions).to.eql(exampleTransactions)

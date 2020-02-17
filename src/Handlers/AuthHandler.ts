@@ -6,12 +6,12 @@ import {Store} from "../Store/Store";
 import {User} from "../Store/UserStore";
 import {Handler, HttpClient} from "../Server";
 import {HttpHandler} from "http4js/core/HttpMessage";
-import {Transactions} from "../Transactions/Transaction";
+import {RealTransactionsManager} from "../Transactions/TransactionManager";
 
 require('dotenv').config();
 
 export class AuthHandler implements Handler {
-  constructor(private userStore: Store<User>, private transaction: Transactions, private httpsClient: HttpClient = HttpsClient) {
+  constructor(private userStore: Store<User>, private transaction: RealTransactionsManager, private httpsClient: HttpClient = HttpsClient) {
   };
 
   handle: HttpHandler = async (req: Req): Promise<Res> => {

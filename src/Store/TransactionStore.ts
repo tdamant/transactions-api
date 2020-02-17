@@ -1,5 +1,5 @@
 import {Store} from "./Store";
-import {Transaction} from "../Transactions/Transaction";
+import {Transaction} from "../Transactions/TransactionManager";
 import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
 
 export class InMemoryTransactionStore implements Store<Transaction> {
@@ -8,6 +8,9 @@ export class InMemoryTransactionStore implements Store<Transaction> {
   async storeAll(tArray: Transaction[]): Promise<Transaction[] | undefined> {
     tArray.forEach((transaction) => this.transactions.push(transaction));
     return tArray
+  }
+  async findById(id: string): Promise<Transaction | undefined> {
+    throw new Error("Method not implemented")
   }
 
   store(t: any): Promise<any> {
@@ -20,6 +23,9 @@ export class InMemoryTransactionStore implements Store<Transaction> {
 }
 
 export class SqlTransactionStore implements Store<Transaction> {
+    findById(id: string): Promise<Transaction | undefined> {
+        throw new Error("Method not implemented.");
+    }
   constructor(private database: PostgresDatabase) {}
 
   async storeAll(tArray: Transaction[]): Promise<Transaction[] | undefined> {

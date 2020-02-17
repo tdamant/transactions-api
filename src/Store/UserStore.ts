@@ -1,17 +1,13 @@
 import {Store} from "./Store";
 import uuid from "uuid";
 import {PostgresDatabase} from "../database/postgres/PostgresDatabase";
+import {randomString} from "../Utils/random";
 
 export interface User {
   accessToken: string,
   refreshToken: string,
   id: string
 }
-
-
-export const randomString = (prefix = 'string') => {
-  return `${prefix}${Math.floor(Math.random() * 1000000)}`
-};
 
 
 export const buildUser = (user: Partial<User>): User => {
@@ -26,10 +22,15 @@ export const buildUser = (user: Partial<User>): User => {
 };
 
 export class InMemoryUserStore implements Store<User> {
-    storeAll(tArray: User[]): Promise<User[] | undefined> {
-        throw new Error("Method not implemented.");
-    }
   public users: User[] = [];
+
+  async storeAll(tArray: User[]): Promise<User[] | undefined> {
+    throw new Error("Method not implemented.");
+  }
+
+  async findById(id: string): Promise<User | undefined> {
+    return this.users.filter((user: User) => user.id === id)[0]
+  }
 
   async findAll(): Promise<User[] | undefined> {
     return this.users
@@ -43,9 +44,14 @@ export class InMemoryUserStore implements Store<User> {
 }
 
 export class SqlUserStore implements Store<User> {
-    storeAll(tArray: User[]): Promise<User[] | undefined> {
-        throw new Error("Method not implemented.");
-    }
+  findById(id: string): Promise<User | undefined> {
+    throw new Error("Method not implemented.");
+  }
+
+  storeAll(tArray: User[]): Promise<User[] | undefined> {
+    throw new Error("Method not implemented.");
+  }
+
   constructor(private database: PostgresDatabase) {
   }
 
@@ -55,7 +61,7 @@ export class SqlUserStore implements Store<User> {
     try {
       const sql = `INSERT INTO users (id, access_token, refresh_token) VALUES ('${user.id}', '${user.accessToken}', '${user.refreshToken}') RETURNING *;`;
       const result = await this.database.query(sql);
-      if (result.rows.length === 1)  {
+      if (result.rows.length === 1) {
         const userFromDB = result.rows[0];
         return {
           id: userFromDB.id,
